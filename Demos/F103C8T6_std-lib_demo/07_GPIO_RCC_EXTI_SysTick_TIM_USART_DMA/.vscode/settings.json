@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "bsp_led.h": "c",
+        "stm32f10x.h": "c",
+        "bsp_rcc_mco.h": "c",
+        "bsp_key.h": "c",
+        "bsp_exti.h": "c",
+        "stm32f10x_it.h": "c",
+        "bsp_systick.h": "c",
+        "stdio.h": "c",
+        "bsp_usart.h": "c",
+        "misc.h": "c",
+        "bsp_dma.h": "c",
+        "stm32f10x_dma.h": "c",
+        "stm32f10x_rcc.h": "c"
+    },
+    "files.encoding": "utf8"
+}

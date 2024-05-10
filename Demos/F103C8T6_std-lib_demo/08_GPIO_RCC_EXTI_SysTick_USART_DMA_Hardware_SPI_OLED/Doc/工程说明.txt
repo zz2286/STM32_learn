@@ -1,0 +1,24 @@
+本工程文件按照【野火】的教程新建。
+
+template:
+
+--Doc 
+	<工程说明.txt>
+
+--Libraries // 库文件夹，包括CM3内核和STM32外设，从 STM32F10x_StdPeriph_Lib_V3.6.0 复制的库文件。
+
+----CMSIS // 内核库文件。CM3内核。
+	<core.cm3.ch/startup_stm32f10x_md.s/stm32f10x.h/system_stm32f10x.ch>
+	<当要使用 Keil 的 AC6 编译器时，必须去掉 core_cm3.c 文件，因为有不兼容的编译器拓展语法。>
+
+----STM32F10x_StdPeriph_Driver  // 外设库文件。STM32外设。
+	<inc/src>
+
+--Listing // 过程文件
+
+--Output // 输出文件
+
+--Project // 项目文件
+
+--User // 应用层文件
+	<main.c/stm32f10x_it.ch/stm32f10x_conf.h>

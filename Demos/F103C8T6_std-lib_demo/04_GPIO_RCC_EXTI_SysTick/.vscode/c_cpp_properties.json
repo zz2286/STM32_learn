@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                /* Keil工程中选项卡C/C++栏[include Paths]项 */
+                "${workspaceFolder}/Libraries/CMSIS",
+                "${workspaceFolder}/Libraries/STM32F10x_StdPeriph_Driver/inc",
+                "${workspaceFolder}/User",
+                "${workspaceFolder}/User/bsp"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                /* Keil工程中选项卡C/C++栏[Preprocessor Symbols]->[Define]项 */
+                "STM32F10X_MD","USE_STDPERIPH_DRIVER"
+            ],
+            "compilerPath": "D:\\Program_Files\\mingw64\\bin\\gcc.exe",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}
