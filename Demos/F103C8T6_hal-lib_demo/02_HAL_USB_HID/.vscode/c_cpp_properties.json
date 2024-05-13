@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                /* 这9条路径由CubeMX添加到生成的Keil工程中选项卡C/C++栏[include Paths]项 */
+                "${workspaceFolder}/Core/Inc",
+                "${workspaceFolder}/USB_DEVICE/App",
+                "${workspaceFolder}/USB_DEVICE/Target",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
+                "${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/Drivers/CMSIS/Include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                /* 这2个处理宏由CubeMX添加到生成的Keil工程中选项卡C/C++栏[Preprocessor Symbols]->[Define]项 */
+                "USE_HAL_DRIVER","STM32F103xB"
+            ],
+            "compilerPath": "D:\\Program_Files\\mingw64\\bin\\gcc.exe",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}
