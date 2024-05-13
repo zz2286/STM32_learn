@@ -110,6 +110,9 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
+extern unsigned char CDC_Rx_buff[50];
+extern unsigned char CDC_Rx_flag;
+
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -242,8 +245,6 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 }
 
 
-extern unsigned char CDC_Rx_buff[50];
-extern unsigned char CDC_Rx_flag;
 /**
   * @brief  Data received over USB OUT endpoint are sent over CDC interface
   *         through this function.
