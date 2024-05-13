@@ -84,14 +84,14 @@ void LED_Blink_Block(unsigned char times, unsigned int ms)
 // GPIO Pin: PA0-3.
 void Key_Process_Loop(void)
 {
-  // 按键 PA0, 反置LED, 按下生效, 松开后再次有效
+  // 按键 PA0, 反置LED, 按下生效, 松开后再次有�?
   if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)==GPIO_PIN_RESET){HAL_Delay(10);
   if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)==GPIO_PIN_RESET)
   {
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)==GPIO_PIN_RESET);
   }}
-  // 按键 PA1, 反置LED, 按下并松开后生效，并再次有效
+  // 按键 PA1, 反置LED, 按下并松�?后生效，并再次有�?
   if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)==GPIO_PIN_RESET){HAL_Delay(10);
   if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)==GPIO_PIN_RESET)
   {

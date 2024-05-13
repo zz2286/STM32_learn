@@ -38,11 +38,11 @@ void usb_cdc_rx_cmd_process(void)
             const char *command = (char*)CDC_Rx_buff + strlen("CMD+LED+");
             if (strncmp(command, "ON",2) == 0)
             {
-                HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+                HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
             }
             else if (strncmp(command, "OFF",3) == 0)
             {
-                HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
             }
             else if (strncmp(command, "TOGGLE",6) == 0)
             {

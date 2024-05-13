@@ -1,10 +1,10 @@
 --cpu Cortex-M3
 "01_hal_usb_cdc_vcp\startup_stm32f103xb.o"
+"01_hal_usb_cdc_vcp\usb.o"
 "01_hal_usb_cdc_vcp\main.o"
 "01_hal_usb_cdc_vcp\gpio.o"
 "01_hal_usb_cdc_vcp\stm32f1xx_it.o"
 "01_hal_usb_cdc_vcp\stm32f1xx_hal_msp.o"
-"01_hal_usb_cdc_vcp\usb.o"
 "01_hal_usb_cdc_vcp\usb_device.o"
 "01_hal_usb_cdc_vcp\usbd_desc.o"
 "01_hal_usb_cdc_vcp\usbd_cdc_if.o"

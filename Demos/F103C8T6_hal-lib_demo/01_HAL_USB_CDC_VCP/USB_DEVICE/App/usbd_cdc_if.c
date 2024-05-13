@@ -244,7 +244,6 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /* USER CODE END 5 */
 }
 
-
 /**
   * @brief  Data received over USB OUT endpoint are sent over CDC interface
   *         through this function.
@@ -267,11 +266,15 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   
   /* edited begin. */
+  #if 0 /* 仅回显 */
+  CDC_Transmit_FS(Buf, *Len);
+  #else /* 回显且保存接收数据(以待后续处理) */
   uint32_t CDC_Rx_len = *Len;
   memset(CDC_Rx_buff, 0, sizeof(CDC_Rx_buff));
   memcpy(CDC_Rx_buff, Buf, CDC_Rx_len);
   CDC_Rx_flag = 1;
   CDC_Transmit_FS(CDC_Rx_buff,sizeof(CDC_Rx_buff));
+  #endif
   /* edited end. */
 
   return (USBD_OK);
