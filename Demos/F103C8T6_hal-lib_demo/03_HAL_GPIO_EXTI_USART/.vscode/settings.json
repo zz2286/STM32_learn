@@ -1,0 +1,9 @@
+{
+    "files.encoding": "utf8",
+    "files.associations": {
+        "stm32f1xx_it.h": "c",
+        "main.h": "c",
+        "usart.h": "c",
+        "stdio.h": "c"
+    }
+}
