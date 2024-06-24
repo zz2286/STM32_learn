@@ -27,4 +27,5 @@
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pwr.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdio.h \
-  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\string.h
+  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\string.h \
+  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdarg.h

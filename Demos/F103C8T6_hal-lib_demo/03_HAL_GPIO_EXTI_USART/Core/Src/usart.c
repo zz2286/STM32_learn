@@ -202,7 +202,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 /* re-direct C library function <printf> to USART1_Tx. */
 int fputc(int ch, FILE *f)
 {
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
   return ch;
 }
 
@@ -210,71 +210,119 @@ int fputc(int ch, FILE *f)
 int fgetc(FILE *f)
 {
   uint8_t ch = 0;
-  HAL_UART_Receive(&huart1, &ch, 1, 0xFFFF);
+  HAL_UART_Receive(&huart1, &ch, 1, HAL_MAX_DELAY);
   return ch;
 }
 
+
+void AAA_USART1_Log(const char *level,  /* log level: DEBUG/INFO/... */
+                    const char *file,
+                    const int   line,
+                    const char *func,
+                    const char *log_format, ...)  /* __VA_ARGS__ = const char *log_format, ... */
+{
+  /* Define arguments' list object. */
+  va_list args;
+  /* Get time_ms since booting. */
+  uint32_t time_ms = HAL_GetTick();
+
+  /* Deal with different Log level. */
+  if (strncmp(level, "DEBUG",5) == 0)
+  {
+    /* Print Log debug title. */
+    printf("[%d.%03d][%s]: %s, %d, %s:\n", (time_ms/1000), (time_ms%1000), level, file, line, func);
+  }
+  else if (strncmp(level, "INFO",4) == 0)
+  {
+    /* Only print info. */
+    printf("[%d.%03d][%s]: ", (time_ms/1000), (time_ms%1000), level);
+  }
+
+  /* __VA_ARGS__: (log_format, ...) */
+  va_start(args, log_format);
+  vprintf(log_format, args);
+  va_end(args);
+}
+
+
+uint8_t Flag_USART1_Rx = 0;
 uint8_t Char_USART1_Rx = 0;
 uint8_t Counter_USART1_Rx = 0;
-uint8_t Buff_USART1_Tx[64] = "{Data in Buff_USART1_Tx[64].}\n";
-uint8_t Buff_USART1_Rx[64] = "{Data in Buff_USART1_Rx[64].}\n";
-uint8_t Buff_USART1_Tx_IT[64] = "{Data in Buff_USART1_Tx_IT[64].}\n";
-uint8_t Buff_USART1_Rx_IT[64] = "{Data in Buff_USART1_Rx_IT[64].}\n";
 
-
-
-void AAA_USART1_Debug_Log(const char *level,  /* log level: DEBUG/INFO/... */
-                          const char *time,
-                          const char *file,
-                          const int   line,
-                          const char *func,
-                          const char *log,...)  /* __VA_ARGS__ = const char *log, ... */
-{
-  printf("[%s] [%s] %s,%s,%d:\n%s\n", time, level, file, func, line, log);
-}
+uint8_t Buff_USART1_Tx[64] = "{Data in Buff_USART1_Tx[64].}";
+uint8_t Buff_USART1_Rx[64] = "{Data in Buff_USART1_Rx[64].}";
+uint8_t Buff_USART1_Tx_IT[64] = "{Data in Buff_USART1_Tx_IT[64].}";
+uint8_t Buff_USART1_Rx_IT[64] = "{Data in Buff_USART1_Rx_IT[64].}";
 
 
 void AAA_USART1_Demo_Main(void)
 {
-  AAA_DEBUG_LOG("Put USART1_Tx.");
+  #if 0
+  AAA_LOG_INFO("Put USART1_Tx: ");
   HAL_UART_Transmit(&huart1, Buff_USART1_Tx, sizeof(Buff_USART1_Tx), HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart1, (uint8_t *)"\n", 1, HAL_MAX_DELAY);
+  #else
+  AAA_LOG_DEBUG("Put USART1_Tx: %s\n", Buff_USART1_Tx);
+  #endif
   memset(Buff_USART1_Rx, 0, sizeof(Buff_USART1_Rx));
 }
 
 
 void AAA_USART1_Demo_Loop(void)
 {
-  #if 0
+  #if 0 /* Loopback: echo buff. */
   if (HAL_UART_Receive(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), 0xFFFF) == HAL_OK)
   {
-    AAA_DEBUG_LOG("Get USART1_Rx.");
+    AAA_LOG_DEBUG("Get USART1_Rx.");
     HAL_UART_Transmit(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), HAL_MAX_DELAY);
   }
-  #else
-  if (HAL_UART_Receive(&huart1, &Char_USART1_Rx, 1, 0xFFFF) == HAL_OK)
+  #else /* Loopback: log message. */
+  
+  if (HAL_UART_Receive(&huart1, &Char_USART1_Rx, 1, 0) == HAL_OK)
   {
-    if (Counter_USART1_Rx < sizeof(Buff_USART1_Rx)-1)
+    /* Get max len = sizeof(buff), max inedx = sizeof(buff)-1. */
+    if ((Flag_USART1_Rx == 0) && (Counter_USART1_Rx <= sizeof(Buff_USART1_Rx)-1))
     {
       Buff_USART1_Rx[Counter_USART1_Rx] = Char_USART1_Rx;
       Counter_USART1_Rx ++;
-    }
-    else if ((Counter_USART1_Rx == sizeof(Buff_USART1_Rx)-1) && (Char_USART1_Rx == '.'))
-    {
-      Buff_USART1_Rx[Counter_USART1_Rx] = Char_USART1_Rx;
-    }
-
-    if (Char_USART1_Rx == '.')
-    {
-      AAA_DEBUG_LOG("Get USART1_Rx.");
-      HAL_UART_Transmit(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), HAL_MAX_DELAY);
-      /* Clear. */
-      Char_USART1_Rx = 0;
-      Counter_USART1_Rx = 0;
-      memset(Buff_USART1_Rx, 0, sizeof(Buff_USART1_Rx));
+      /* Get end-of-message character '.' or Buffer overflow. */
+      if ((Char_USART1_Rx == '.') || (Counter_USART1_Rx == sizeof(Buff_USART1_Rx)))
+      {
+        /* Replace final character to '\0'. */
+        Buff_USART1_Rx[Counter_USART1_Rx-1] = '\0';
+        Flag_USART1_Rx = 1;
+      }
     }
   }
-  #endif
 
+  AAA_USART1_Demo_Process(50);
+
+  #endif
 }
+
+void AAA_USART1_Demo_Process(uint32_t tick_interval)
+{
+  static uint32_t tick_counter = 0;
+  if ((HAL_GetTick() - tick_counter) < tick_interval) return;
+  tick_counter = HAL_GetTick();
+  
+  if (Flag_USART1_Rx == 1)
+  {
+    /* Print Log. */
+    #if 0
+    AAA_LOG_INFO("Get USART1_Rx: ");
+    HAL_UART_Transmit(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart1, (uint8_t *)"\n", 1, HAL_MAX_DELAY);
+    #else
+    AAA_LOG_DEBUG("Get USART1_Rx: %s\n",Buff_USART1_Rx);
+    #endif
+    /* Clear. */
+    Flag_USART1_Rx = 0;
+    Char_USART1_Rx = 0;
+    Counter_USART1_Rx = 0;
+    memset(Buff_USART1_Rx, 0, sizeof(Buff_USART1_Rx));
+  }
+}
+
 
 /* USER CODE END 1 */

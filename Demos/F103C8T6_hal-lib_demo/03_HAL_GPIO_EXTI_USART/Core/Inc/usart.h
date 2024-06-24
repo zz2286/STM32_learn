@@ -30,8 +30,9 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 
-#include <stdio.h>  // printf
-#include <string.h> // memset
+#include <stdio.h>  // printf()
+#include <string.h> // memset()
+#include <stdarg.h> // va_start(),vsnprintf()
 
 /* USER CODE END Includes */
 
@@ -41,7 +42,9 @@ extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
 
-#define AAA_DEBUG_LOG(...) AAA_USART1_Debug_Log("DEBUG", __TIME__, __FILE__, __LINE__, __func__, __VA_ARGS__)
+/* __TIME__ is pre-compilation time, do NOT use. */
+#define AAA_LOG_DEBUG(...)  AAA_USART1_Log("DEBUG", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
+#define AAA_LOG_INFO(...)   AAA_USART1_Log("INFO", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
 
 /* USER CODE END Private defines */
 
@@ -50,14 +53,14 @@ void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
-void AAA_USART1_Debug_Log(const char *level,
-                          const char *time,
-                          const char *file,
-                          const int   line,
-                          const char *func,
-                          const char *log,...);
+void AAA_USART1_Log(const char *level,
+                    const char *file,
+                    const int   line,
+                    const char *func,
+                    const char *log_format,...);
 void AAA_USART1_Demo_Main(void);
 void AAA_USART1_Demo_Loop(void);
+void AAA_USART1_Demo_Process(uint32_t tick_interval);
 
 /* USER CODE END Prototypes */
 

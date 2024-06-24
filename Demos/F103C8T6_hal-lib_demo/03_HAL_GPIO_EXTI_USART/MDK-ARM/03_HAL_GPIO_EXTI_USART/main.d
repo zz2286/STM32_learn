@@ -29,4 +29,5 @@
   ..\Core\Inc\usart.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdio.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\string.h \
+  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdarg.h \
   ..\Core\Inc\gpio.h

@@ -23,3 +23,6 @@ void AAA_USART1_Demo_Main(void);
 void AAA_USART1_Demo_Loop(void);  
 接收，按固定buff长度接收回显  
 接收，按'.'标志符接收回显  
+
+/* buffer overflow. */  
+缓冲区溢出还没处理。
