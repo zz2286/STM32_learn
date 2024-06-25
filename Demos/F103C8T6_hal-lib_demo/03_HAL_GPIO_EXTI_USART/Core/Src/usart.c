@@ -310,6 +310,7 @@ void AAA_USART1_Ctrl_CMD(uint8_t *RxBuffer)
   else
   {
     /* Do nothing. */
+    AAA_LOG_INFO("Failed to read command.");
   }
 }
 
@@ -326,7 +327,7 @@ uint8_t Buff_USART1_Rx[65] = "Data in Buff_USART1_Rx[65].";
 const char *info = "\n\
 Mode: USART1 interrput disable.\n\
 Help:\n\
-1. Get Buff_USART1_Rx[65] end with '.' or max len 64;\n\
+1. Get Buff_USART1_Rx[65] end with '.' or max len 64 or idle event;\n\
 2. Get <CMD+LED+?.> or <CMD+BT+?.>.\n\
 \n";
 
@@ -340,13 +341,14 @@ void AAA_USART1_Demo_Main(void)
 
 void AAA_USART1_Demo_Loop(void)
 {
-  #if 0 /* Loopback: echo buff. */
+  #if 0 /* Only echo buff. */
   if (HAL_UART_Receive(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), 0xFFFF) == HAL_OK)
   {
     AAA_LOG_DEBUG("Get USART1_Rx.");
     HAL_UART_Transmit(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), HAL_MAX_DELAY);
   }
-  #else /* Loopback: log message. */
+
+  #elif 0 /* Log message and do commmand, end with charactor or buff-overflow. */
   if (HAL_UART_Receive(&huart1, &Char_USART1_Rx, 1, 0) == HAL_OK)
   {
     /* Get max len = sizeof(buff), max inedx = sizeof(buff)-1. */
@@ -362,6 +364,19 @@ void AAA_USART1_Demo_Loop(void)
         Flag_USART1_Rx = 1;
       }
     }
+  }
+  AAA_USART1_Demo_Process(50);
+
+  #else /* Log message and do commmand, end with charactor or buff-overflow or idle event. */
+  uint16_t RxLen = 0;
+  if (HAL_UARTEx_ReceiveToIdle(&huart1, Buff_USART1_Rx, sizeof(Buff_USART1_Rx), &RxLen, HAL_MAX_DELAY) == HAL_OK)
+  {
+    /* Get end-of-message character '.' */
+    if (Buff_USART1_Rx[RxLen-1] == '.')
+    {
+      Buff_USART1_Rx[RxLen-1] = '\0';
+    }
+    Flag_USART1_Rx = 1;
   }
   AAA_USART1_Demo_Process(50);
   #endif
@@ -401,12 +416,13 @@ const char *info = "\n\
 Mode: USART1 interrput enable.\n\
 Help:\n\
 1. Get Buff_USART1_Rx_IT[65] end with '.' or max len 64 or IDLE;\n\
+2. Get with interrupt, but print still in blocking mode.\n\
 \n";
 
 void AAA_USART1_Demo_Main(void)
 {
   AAA_LOG_INFO(info);
-  AAA_LOG_DEBUG("Print USART1_Tx_IT: [%s]\n", Buff_USART1_Tx_IT);
+  AAA_LOG_DEBUG("Blocking Print USART1_Tx_IT: [%s]\n", Buff_USART1_Tx_IT);
   AAA_LOG_INFO("Getting USART1_Rx_IT...\n");
   #if 0 /* HAL_UART_Transmit_IT */
   HAL_UART_Transmit_IT(&huart1, Buff_USART1_Tx_IT, sizeof(Buff_USART1_Tx_IT));
@@ -430,15 +446,15 @@ void AAA_USART1_Demo_Process(uint32_t tick_interval)
 
   if (Flag_USART1_Rx_IT == 1)
   {
-    /* Print Log. */
+    /* Print log. */
     AAA_LOG_DEBUG("Get USART1_Rx: %s\n",Buff_USART1_Rx_IT);
-    /* Clear. */
+    /* Deal with data as commmand. */
+    AAA_USART1_Ctrl_CMD(Buff_USART1_Rx_IT);
+    /* Clear params. */
     Flag_USART1_Rx_IT = 0;
     Char_USART1_Rx_IT = 0;
     Cntr_USART1_Rx_IT = 0;
     memset(Buff_USART1_Rx_IT, 0, sizeof(Buff_USART1_Rx_IT));
-    /* Continue Receive_IT. */
-    HAL_UART_Receive_IT(&huart1, &Char_USART1_Rx_IT, 1);
   }
 }
 
@@ -481,12 +497,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         Flag_USART1_Rx_IT = 1;
       }
     }
+    else /* Flag_USART1_Rx_IT == 1 */
+    {
+      /* Do nothing to exclude redundant received data. */
+    }
+
     // /* Idle line detection interrupt. */
     // if (__HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_IDLE) != RESET)
     // {
     //   Flag_USART1_Rx_IT = 1;
     //   __HAL_UART_CLEAR_IDLEFLAG(&huart1);
     // }
+
     /* Continue Receive_IT. */
     HAL_UART_Receive_IT(&huart1, &Char_USART1_Rx_IT, 1);
   }
