@@ -90,8 +90,8 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  printf("Initialization finished.\r\n");
-  AAA_LED_Blink_Block(3,300);
+  AAA_LOG_INFO("Initialization finished.\n");
+  AAA_LED_Blink_Block(3,330);
 
   /* USER CODE END 2 */
 

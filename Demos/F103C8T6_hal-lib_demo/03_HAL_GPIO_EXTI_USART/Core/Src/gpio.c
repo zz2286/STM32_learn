@@ -136,6 +136,16 @@ void AAA_Key_Scan_Loop(void)
 }
 
 
+static void AAA_Key_Do_PA0(void)
+{
+  /* Do nothing. */
+}
+
+static void AAA_Key_Do_PA1(void)
+{
+  /* Do nothing. */
+}
+
 static void AAA_Key_Do_PA2(void)
 {
   /* Do nothing. */
@@ -144,6 +154,32 @@ static void AAA_Key_Do_PA2(void)
 static void AAA_Key_Do_PA3(void)
 {
   /* Do nothing. */
+}
+
+/**
+  * @brief  EXTI line detection callbacks.
+  * @param  GPIO_Pin: Specifies the pins connected EXTI line
+  * @retval None
+  * @note copy from and replace __weak function in driver file: stm32f1xx_hal_gpio.c
+  * @note EXTIx_IRQHandler -> HAL_GPIO_EXTI_IRQHandler(GPIO_Pin) -> HAL_GPIO_EXTI_Callback(GPIO_Pin)
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* NOTE: __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin) outside and before this function, 
+           EXTI line interrupt request state has been cleared. */
+
+  /* Called by EXTI0_IRQHandler, triggered by PA0 (PULLUP & IT_RISING). */
+  if (GPIO_Pin == GPIO_PIN_0)
+  {
+    AAA_LED_ON();
+    AAA_Key_Do_PA0();
+  }
+  /* Called by EXTI1_IRQHandler, triggered by PA1 (PULLUP & IT_FALLING). */
+  else if (GPIO_Pin == GPIO_PIN_1)
+  {
+    AAA_LED_OFF();
+    AAA_Key_Do_PA1();
+  }
 }
 
 /* USER CODE END 2 */

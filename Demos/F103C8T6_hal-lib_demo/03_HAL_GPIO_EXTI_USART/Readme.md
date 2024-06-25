@@ -15,14 +15,8 @@ USART2_Rx/Tx - PB11/PB10, 接 HC-05 的蓝牙串口模块, 波特率 9600;
 
 串口功能未完成, 目前实现:
 
-#define AAA_DEBUG_LOG(...) AAA_USART1_Debug_Log("DEBUG", __TIME__, __FILE__, __LINE__, __func__, __VA_ARGS__)
-
-void AAA_USART1_Demo_Main(void);  
-发送。
-
-void AAA_USART1_Demo_Loop(void);  
-接收，按固定buff长度接收回显  
-接收，按'.'标志符接收回显  
-
-/* buffer overflow. */  
-缓冲区溢出还没处理。
+1. USART1 的非中断收发不定长(小于64)字符串数据。  
+    ```
+    #define USART1_INTERRUPT_DISABLE
+    ```
+2. 

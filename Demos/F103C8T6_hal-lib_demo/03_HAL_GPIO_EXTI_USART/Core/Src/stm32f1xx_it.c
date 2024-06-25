@@ -22,7 +22,7 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "gpio.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -258,40 +258,4 @@ void USART3_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
-/**
-  * @brief  EXTI line detection callbacks.
-  * @param  GPIO_Pin: Specifies the pins connected EXTI line
-  * @retval None
-  * @note copy from and replace __weak function in driver file: stm32f1xx_hal_gpio.c
-  * @note EXTIx_IRQHandler -> HAL_GPIO_EXTI_IRQHandler(GPIO_Pin) -> HAL_GPIO_EXTI_Callback(GPIO_Pin)
-  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  /* NOTE: __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin) outside and before this function, 
-           EXTI line interrupt request state has been cleared. */
-
-  /* Called by EXTI0_IRQHandler, triggered by PA0 (PULLUP & IT_RISING). */
-  if (GPIO_Pin == GPIO_PIN_0)
-  {
-    AAA_LED_ON();
-  }
-  /* Called by EXTI1_IRQHandler, triggered by PA1 (PULLUP & IT_FALLING). */
-  else if (GPIO_Pin == GPIO_PIN_1)
-  {
-    AAA_LED_OFF();
-  }
-}
-
-/**
-  * @brief  Tx Transfer completed callbacks.
-  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
-  *                the configuration information for the specified UART module.
-  * @retval None
-  * @note copy from and replace __weak function in driver file: stm32f1xx_hal_uart.c
-  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_EndTransmit_IT -> HAL_UART_TxCpltCallback
-  */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-  /* Do nothing. */
-}
 /* USER CODE END 1 */

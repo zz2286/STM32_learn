@@ -50,6 +50,8 @@ void AAA_LED_TOGGLE(void);
 void AAA_LED_Blink_Block(uint8_t times, uint16_t ms);
 
 void AAA_Key_Scan_Loop(void);
+static void AAA_Key_Do_PA0(void);
+static void AAA_Key_Do_PA1(void);
 static void AAA_Key_Do_PA2(void);
 static void AAA_Key_Do_PA3(void);
 
