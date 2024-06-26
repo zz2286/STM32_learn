@@ -1,28 +1,31 @@
-# 03_HAL_GPIO_EXTI_USART
+## 03_HAL_GPIO_EXTI_USART
+STM32F103C8T6 基于 CubeMX 生成代码，并由 VSCode 编辑，再由 Keil 编译的项目。
 
+## 之前已实现的基础功能
 
-## 【按键外部中断】  
-按键 PA0, 上升沿有效, 松开点亮LED.  
-按键 PA1, 下降沿有效, 按下熄灭LED.  
-
-## 【按键轮询功能】  
+**按键轮询功能**
 按键 PA2, 下降沿有效, 按下时阻塞且反置LED, 松开后退出阻塞.  
 按键 PA3, 按下点亮LED, 松开熄灭LED。  
 
-## 【串口收发功能】
+**按键外部中断**
+按键 PA0, 上升沿有效, 松开点亮LED.  
+按键 PA1, 下降沿有效, 按下熄灭LED.  
+
+
+# 串口收发功能
+
 通用同步异步收发器 `USART`  
 在本案例中, 使用的是 通用同步收发器 的异步模式 `UART`  
 
-### 串口连接:  
+#### 串口连接:
 
 - USART1_Rx/Tx - PA10/PA9, 接 CH340 的USB串口模块, 波特率 115200;  
 - USART2_Rx/Tx - PB11/PB10, 接 HC-05 的蓝牙串口模块, 波特率 9600;  
 
-### 功能实现:  
 
-#### 一、非中断 收发数据
+## 一、非中断 收发数据
 
-##### 1. 非中断 串口收发 {ch1.1}
+### 1. 非中断 串口收发 {ch1.1}
 ```C
 /* Disable  USART1 intertupt. */
 #ifdef USART1_INTERRUPT_DISABLE
@@ -115,7 +118,7 @@ void AAA_USART1_Demo_Process(uint32_t tick_interval)
 #endif  /* Disable  USART1 intertupt. */
 ```
 
-##### 2. 输入输出接口重定向
+### 2. 输入输出接口重定向
 ```C
 /* re-direct C library function to USART1_Tx. */
 int fputc(int ch, FILE *f)
@@ -132,7 +135,7 @@ int fgetc(FILE *f)
 }
 ```
 
-##### 3. 非中断 调试输出Log
+### 3. 非中断 调试输出日志
 ```C
 /**
 * @brief USART1 print log in blocking mode.
@@ -171,8 +174,11 @@ void AAA_USART1_Log(const char *level, const char *file, const int line, const c
 #define AAA_LOG_INFO(...)   AAA_USART1_Log("INFO", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
 ```
 
-#### 二、串口指令读取与外设控制
-##### 1. 自定义函数 读取缓冲区数据，识别与执行指令，控制外设。
+
+
+## 二、串口指令读取与外设控制
+
+### 1. 自定义函数: 读取数据-识别指令-控制外设。
 ```C
 /**
 * @brief USART1 read command and control peripheral.
@@ -236,15 +242,17 @@ void AAA_USART1_Ctrl_CMD(uint8_t *RxBuffer)
 }
 ```
 
-#### 三、串口接收不定长字符串数据(多种方案)
 
-##### 1. 非中断 接收不定长(小于64)字符串数据。  
+
+## 三、串口接收不定长字符串数据(多种方案)
+
+### 1. 非中断 接收不定长字符串
 具体代码见前文 [非中断 串口收发](ch1.1) 部分。
 ```C
 #define USART1_INTERRUPT_DISABLE
 ```
 
-##### 2. 中断 接收不定长(小于64)字符串数据。  
+### 2. 中断 接收不定长字符串 
 ```C
 #define USART1_INTERRUPT_ENABLE
 ```
@@ -345,19 +353,19 @@ void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart)
 ```
 
 **方案三**: 方案二的简化版。  
-- 使用 HAL_UARTEx_ReceiveToIdle_IT 和 HAL_UARTEx_RxEventCallback 函数。  
+- 使用 `HAL_UARTEx_ReceiveToIdle_IT` 和 `HAL_UARTEx_RxEventCallback` 函数。  
 ```C
 #elif defined USART1_INT_SOLUTION_3
 /* HAL_UARTEx_ReceiveToIdle_IT & HAL_UARTEx_RxEventCallback. */
 /* Same as Solution_2. Receive till either the expected number of data is received or an IDLE event occurs. */
 HAL_UARTEx_ReceiveToIdle_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT)-1);
 ```
-- 使用 HAL_UARTEx_ReceiveToIdle_IT 函数开启下一次接收。  
+- 使用 `HAL_UARTEx_ReceiveToIdle_IT` 函数开启下一次接收。  
 ```C
 HAL_UARTEx_ReceiveToIdle_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT)-1);
 ```
 
-##### 3. 中断+DMA
+### 3. 中断+DMA 接收不定长字符串
 
 
 
@@ -367,23 +375,23 @@ HAL_UARTEx_ReceiveToIdle_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT
 # Template & Format
 
 
-- [ ] 未完成的任务
-- [x] 已完成的任务
+- [ ] 未完成的任务  
+- [x] 已完成的任务  
 
 
-[Baidu](https://www.baidu.com "Click to https://www.baidu.com.")
-[baidu][url_web_1]
-[bilibili][url_web_2]
-[Bilibili]
-[搜图神器][url_web_3]
+[Baidu](https://www.baidu.com "Click to https://www.baidu.com.")  
+[baidu][url_web_1]  
+[bilibili][url_web_2]  
+[Bilibili]  
+[搜图神器][url_web_3]  
 
 
-![url_img_1]( https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR "星空")
-![url_img_2]
-![url_img_3]
+![url_img_1]( https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR "星空")  
+![url_img_2]  
+![url_img_3]  
 
-Here is a footnote reference[^abcd].
-Here is a footnote reference[^1234].
+Here is a footnote reference[^abcd].  
+Here is a footnote reference[^1234].  
 
 <!-- 水平线 -->
 ---
@@ -421,5 +429,5 @@ ___
     "山川湖海"
 
 
-[^abcd]: This is the footnote text.
-[^1234]: This is the footnote text.
+[^abcd]: This is the footnote text.  
+[^1234]: This is the footnote text.  
