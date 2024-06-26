@@ -388,8 +388,14 @@ HAL_UARTEx_ReceiveToIdle_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT
 
 ![url_img_0](https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR "星空")  
 <img src="https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR" alt="url_img_0" title="星空" style="height: 100%; width: 100%; user-select: none; object-fit: contain;">
-> GitHub 无法识别无后缀的图片链接。  
 
+> 由于 GitHub 无法识别无后缀的图片链接。  
+> 借助第三方平台转换重定向链接 https://images.weserv.nl/?url= 。  
+
+![url_img_0](https://images.weserv.nl/?url=https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR "星空")  
+<img src="https://images.weserv.nl/?url=https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR" alt="url_img_0" title="星空" style="height: 100%; width: 100%; user-select: none; object-fit: contain;">
+
+图片：
 ![url_img_1]  
 ![url_img_2]  
 ![url_img_3]  
