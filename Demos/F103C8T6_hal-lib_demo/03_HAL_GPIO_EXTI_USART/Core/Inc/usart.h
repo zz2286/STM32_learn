@@ -46,9 +46,9 @@ extern UART_HandleTypeDef huart3;
 
 // #define USART1_INTERRUPT_DISABLE  /* Disable USART1 intertupt. */
 #define USART1_INTERRUPT_ENABLE   /* Enable  USART1 intertupt. */
-// #define USART1_INT_SOLUTION_1   /* Receive only one char once idle event, so cannot figure uncertian length data with idle. */
-#define USART1_INT_SOLUTION_2   /* Receive full buff once complete, so can figure uncertian length data with idle event. */
-
+// #define USART1_INT_SOLUTION_1   /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback. */
+// #define USART1_INT_SOLUTION_2   /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback & AAA_UART_IDLE_Callback. */
+#define USART1_INT_SOLUTION_3   /* HAL_UARTEx_ReceiveToIdle_IT & HAL_UARTEx_RxEventCallback. */
 
 // #define USART1_DMA_ENABLE         /* Enable  USART1 DMA. */
 // #define USART1_DMA_DISABLE        /* Disable USART1 DMA. */
@@ -73,12 +73,19 @@ void AAA_USART1_Demo_Loop(void);
 void AAA_USART1_Demo_Process(uint32_t tick_interval);
 
 #if defined(USART1_INTERRUPT_ENABLE) && defined(USART1_INT_SOLUTION_1)
-/* Receive only one char once idle, so cannot figure uncertian length data. */
 /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback. */
+/* Receive only one char once IDLE, so cannot get uncertian length data by IDLE event. */
+/* Unless get the appointed end-charactor or buffer full. */
+
 #elif defined(USART1_INTERRUPT_ENABLE) && defined(USART1_INT_SOLUTION_2)
-/* Receive full buff once complete, so can figure uncertian length data with idle event. */
-/* UART_Receive_IT & UART_RxCpltCallback & UART_IDLE_Callback. */
+/* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback & AAA_UART_IDLE_Callback. */
+/* Receive full buffer or get IDLE event, so can get uncertain length data. */
 void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart);
+
+#elif defined(USART1_INTERRUPT_ENABLE) && defined(USART1_INT_SOLUTION_3)
+/* HAL_UARTEx_ReceiveToIdle_IT & HAL_UARTEx_RxEventCallback. */
+/* Same as Solution_2. Receive till either the expected number of data is received or an IDLE event occurs. */
+
 #endif
 
 /* USER CODE END Prototypes */
