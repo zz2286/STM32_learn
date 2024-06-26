@@ -387,9 +387,8 @@ HAL_UARTEx_ReceiveToIdle_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT
 
 
 ![url_img_0](https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR "星空")  
-> GitHub 无法识别无后缀的图片链接, 可以用 \<img src="url" alt="" title=""> 来替代。  
-
-<img src="https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR" alt="url_img_0" title="星空">
+<img src="https://hbimg.huaban.com/39c128c413cbaa1a4dc4a1f185041b3b8940ff41eed3e0-68ZWjR" alt="url_img_0" title="星空" style="height: 100%; width: 100%; user-select: none; object-fit: contain;">
+> GitHub 无法识别无后缀的图片链接。  
 
 ![url_img_1]  
 ![url_img_2]  
