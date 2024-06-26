@@ -44,8 +44,12 @@ extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
 
-#define USART1_INTERRUPT_DISABLE  /* Disable USART1 intertupt. */
-// #define USART1_INTERRUPT_ENABLE   /* Enable  USART1 intertupt. */
+// #define USART1_INTERRUPT_DISABLE  /* Disable USART1 intertupt. */
+#define USART1_INTERRUPT_ENABLE   /* Enable  USART1 intertupt. */
+// #define USART1_INT_SOLUTION_1   /* Receive only one char once idle event, so cannot figure uncertian length data with idle. */
+#define USART1_INT_SOLUTION_2   /* Receive full buff once complete, so can figure uncertian length data with idle event. */
+
+
 // #define USART1_DMA_ENABLE         /* Enable  USART1 DMA. */
 // #define USART1_DMA_DISABLE        /* Disable USART1 DMA. */
 
@@ -67,6 +71,15 @@ void AAA_USART1_Ctrl_CMD(uint8_t *RxBuffer);
 void AAA_USART1_Demo_Main(void);
 void AAA_USART1_Demo_Loop(void);
 void AAA_USART1_Demo_Process(uint32_t tick_interval);
+
+#if defined(USART1_INTERRUPT_ENABLE) && defined(USART1_INT_SOLUTION_1)
+/* Receive only one char once idle, so cannot figure uncertian length data. */
+/* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback. */
+#elif defined(USART1_INTERRUPT_ENABLE) && defined(USART1_INT_SOLUTION_2)
+/* Receive full buff once complete, so can figure uncertian length data with idle event. */
+/* UART_Receive_IT & UART_RxCpltCallback & UART_IDLE_Callback. */
+void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart);
+#endif
 
 /* USER CODE END Prototypes */
 

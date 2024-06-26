@@ -118,10 +118,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
-  #ifdef USART1_INTERRUPT_ENABLE
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-  #endif
-
   /* USER CODE END USART1_MspInit 1 */
   }
   else if(uartHandle->Instance==USART3)
@@ -310,7 +306,7 @@ void AAA_USART1_Ctrl_CMD(uint8_t *RxBuffer)
   else
   {
     /* Do nothing. */
-    AAA_LOG_INFO("Failed to read command.");
+    AAA_LOG_INFO("Failed to read command.\n");
   }
 }
 
@@ -412,25 +408,45 @@ uint8_t Char_USART1_Rx_IT = 0;
 uint8_t Cntr_USART1_Rx_IT = 0;
 uint8_t Buff_USART1_Tx_IT[65] = "Data in Buff_USART1_Tx_IT[65].";
 uint8_t Buff_USART1_Rx_IT[65] = "Data in Buff_USART1_Rx_IT[65].";
-const char *info = "\n\
+
+const char *info_1 = "\n\
 Mode: USART1 interrput enable.\n\
 Help:\n\
-1. Get Buff_USART1_Rx_IT[65] end with '.' or max len 64 or IDLE;\n\
-2. Get with interrupt, but print still in blocking mode.\n\
+1. Get with interrupt, but print still in blocking mode;\n\
+";
+/* const char *info_2 */
+#if defined USART1_INT_SOLUTION_1
+const char *info_2 = "\
+2. Get Buff_USART1_Rx_IT[65] end with '.' or max len 64.\n\
 \n";
+#elif defined USART1_INT_SOLUTION_2
+const char *info_2 = "\
+2. Get Buff_USART1_Rx_IT[65] end with max len 64 or idle event.\n\
+\n";
+#endif
 
 void AAA_USART1_Demo_Main(void)
 {
-  AAA_LOG_INFO(info);
+  AAA_LOG_INFO("%s%s", info_1, info_2);
   AAA_LOG_DEBUG("Blocking Print USART1_Tx_IT: [%s]\n", Buff_USART1_Tx_IT);
   AAA_LOG_INFO("Getting USART1_Rx_IT...\n");
-  #if 0 /* HAL_UART_Transmit_IT */
-  HAL_UART_Transmit_IT(&huart1, Buff_USART1_Tx_IT, sizeof(Buff_USART1_Tx_IT));
-  HAL_UART_Transmit_IT(&huart1, (uint8_t *)"\n", 1);
-  #endif
-  /* Clear Buff_USART1_Rx_IT and Start Receive_IT. */
+
+  // HAL_UART_Transmit_IT(&huart1, Buff_USART1_Tx_IT, sizeof(Buff_USART1_Tx_IT));
+
+  /* Clear params. */
   memset(Buff_USART1_Rx_IT, 0, sizeof(Buff_USART1_Rx_IT));
+
+  /* Different solution of receive. */
+  #if defined USART1_INT_SOLUTION_1 /* UART_Receive_IT & UART_RxCpltCallback. */
+  /* Receive only one char once idle, so cannot figure uncertian length data with idle. */
   HAL_UART_Receive_IT(&huart1, &Char_USART1_Rx_IT, 1);
+
+  #elif defined USART1_INT_SOLUTION_2 /* UART_Receive_IT & UART_RxCpltCallback & UART_IDLE_Callback. */
+  /* Receive full buff once complete, so can figure uncertian length data with idle event. */
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+  HAL_UART_Receive_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT)-1);
+
+  #endif
 }
 
 void AAA_USART1_Demo_Loop(void)
@@ -447,39 +463,35 @@ void AAA_USART1_Demo_Process(uint32_t tick_interval)
   if (Flag_USART1_Rx_IT == 1)
   {
     /* Print log. */
-    AAA_LOG_DEBUG("Get USART1_Rx: %s\n",Buff_USART1_Rx_IT);
+    AAA_LOG_DEBUG("Get USART1_Rx: [%s]\n",Buff_USART1_Rx_IT);
     /* Deal with data as commmand. */
     AAA_USART1_Ctrl_CMD(Buff_USART1_Rx_IT);
     /* Clear params. */
-    Flag_USART1_Rx_IT = 0;
+    memset(Buff_USART1_Rx_IT, 0, sizeof(Buff_USART1_Rx_IT));
     Char_USART1_Rx_IT = 0;
     Cntr_USART1_Rx_IT = 0;
-    memset(Buff_USART1_Rx_IT, 0, sizeof(Buff_USART1_Rx_IT));
+    Flag_USART1_Rx_IT = 0;
   }
 }
 
 
-
+#if 0 /* void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) */
 /**
   * @brief  Tx Transfer completed callbacks.
-  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
-  *                the configuration information for the specified UART module.
-  * @retval None
-  * @note copy from and replace __weak function in driver file: stm32f1xx_hal_uart.c
-  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_EndTransmit_IT -> HAL_UART_TxCpltCallback
+  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_EndTransmit_IT -> HAL_UART_TxCpltCallback.
   */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* Do nothing. */
 }
+#endif
+
+
+#if defined USART1_INT_SOLUTION_1 /* UART_Receive_IT & UART_RxCpltCallback. */
 
 /**
   * @brief  Rx Transfer completed callbacks.
-  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
-  *                the configuration information for the specified UART module.
-  * @retval None
-  * @note copy from and replace __weak function in driver file: stm32f1xx_hal_uart.c
-  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_Receive_IT -> HAL_UART_RxCpltCallback
+  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_Receive_IT -> HAL_UART_RxCpltCallback.
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -501,14 +513,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
       /* Do nothing to exclude redundant received data. */
     }
-
-    // /* Idle line detection interrupt. */
-    // if (__HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_IDLE) != RESET)
-    // {
-    //   Flag_USART1_Rx_IT = 1;
-    //   __HAL_UART_CLEAR_IDLEFLAG(&huart1);
-    // }
-
     /* Continue Receive_IT. */
     HAL_UART_Receive_IT(&huart1, &Char_USART1_Rx_IT, 1);
   }
@@ -517,6 +521,79 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     /* Do nothing. */
   }
 }
+
+#elif defined USART1_INT_SOLUTION_2 /* UART_Receive_IT & UART_RxCpltCallback & UART_IDLE_Callback. */
+
+/**
+  * @brief  Rx Transfer completed callbacks.
+  * @note USARTx_IRQHandler -> HAL_UART_IRQHandler -> UART_Receive_IT -> HAL_UART_RxCpltCallback.
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    AAA_LOG_INFO("RxCpltCallback.\n");
+    if (Flag_USART1_Rx_IT == 0)
+    {
+      Flag_USART1_Rx_IT = 1;
+    }
+    else /* Flag_USART1_Rx_IT == 1 */
+    {
+      /* Do nothing. */
+    }
+    /* Restart UART_Receive_IT by AAA_UART_IDLE_Callback(). */
+  }
+  if (huart->Instance == USART3)
+  {
+    /* Do nothing. */
+  }
+}
+
+/**
+  * @brief  Self-defined function for IDLE callbacks.
+  * @note USARTx_IRQHandler -> AAA_UART_IDLE_Callback.
+  */
+void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    AAA_LOG_INFO("IDLE_Callback.\n");
+    if (Flag_USART1_Rx_IT == 0)
+    {
+      Flag_USART1_Rx_IT = 1;
+    }
+    else /* Flag_USART1_Rx_IT == 1 */
+    {
+      /* RxCpltCallback has been called. */
+      /* Or AAA_USART1_Demo_Process has not finished yet. */
+      /* Do nothing. */
+    }
+    /* Restart with UART_Start_Receive_IT() instead of HAL_UART_Receive_IT(). */
+    /* ? May should be after AAA_USART1_Demo_Process() ? */
+    UART_Start_Receive_IT(&huart1, Buff_USART1_Rx_IT, sizeof(Buff_USART1_Rx_IT)-1);
+  }
+}
+
+#elif defined USART1_INT_SOLUTION_3 /* UART_Receive_IT & UART_RxCpltCallback & UART_IDLE_Callback. */
+
+/**
+  * @brief  Reception Event Callback (Rx event notification called after use of advanced reception service).
+  * @param  Size  Number of data available in application reception buffer (indicates a position in
+  *               reception buffer until which, data are available)
+  */
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+  if (huart->Instance == USART1)
+  {
+    AAA_LOG_INFO("RxEventCallback.\n");
+  }
+  if (huart->Instance == USART3)
+  {
+    /* Do nothing. */
+  }
+}
+
+#endif  /* USART1_INT_SOLUTION_x */
 
 
 #endif  /* Enable  USART1 intertupt. */
