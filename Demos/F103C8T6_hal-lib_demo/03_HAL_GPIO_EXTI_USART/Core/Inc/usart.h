@@ -45,13 +45,15 @@ extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN Private defines */
 
 // #define USART1_INTERRUPT_DISABLE  /* Disable USART1 intertupt. */
+
 #define USART1_INTERRUPT_ENABLE   /* Enable  USART1 intertupt. */
 // #define USART1_INT_SOLUTION_1   /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback. */
 // #define USART1_INT_SOLUTION_2   /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback & AAA_UART_IDLE_Callback. */
 #define USART1_INT_SOLUTION_3   /* HAL_UARTEx_ReceiveToIdle_IT & HAL_UARTEx_RxEventCallback. */
 
 // #define USART1_DMA_ENABLE         /* Enable  USART1 DMA. */
-// #define USART1_DMA_DISABLE        /* Disable USART1 DMA. */
+// #define USART1_DMA_SOLUTION_1     /* HAL_UART_Receive_IT & HAL_UART_RxCpltCallback & AAA_UART_IDLE_Callback. */
+// #define USART1_DMA_SOLUTION_2
 
 
 #define AAA_LOG_DEBUG(...)  AAA_USART1_Log("DEBUG", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
