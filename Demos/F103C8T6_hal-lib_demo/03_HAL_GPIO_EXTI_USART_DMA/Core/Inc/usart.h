@@ -52,8 +52,8 @@ extern UART_HandleTypeDef huart3;
 // #define USART1_INT_SOLUTION_3   /* HAL_UARTEx_ReceiveToIdle_IT & HAL_UARTEx_RxEventCallback. */
 
 #define USART1_DMA_ENABLE         /* Enable  USART1 DMA. */
-// #define USART1_DMA_SOLUTION_1     /* HAL_UART_Receive_DMA & AAA_UART_IDLE_Callback. */
-#define USART1_DMA_SOLUTION_2
+// #define USART1_DMA_SOLUTION_1     /* HAL_UART_Receive_DMA & HAL_UART_RxCpltCallback & HAL_UART_RxHalfCpltCallback & AAA_UART_IDLE_Callback. */
+#define USART1_DMA_SOLUTION_2     /* HAL_UARTEx_ReceiveToIdle_DMA & HAL_UARTEx_RxEventCallback. */
 
 
 #define AAA_LOG_DEBUG(...)  AAA_USART1_Log("DEBUG", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
@@ -90,13 +90,13 @@ void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart);
 
 #endif
 
+
 #if   defined(USART1_DMA_ENABLE) && defined(USART1_DMA_SOLUTION_1)
-/* */
+/* HAL_UART_Receive_DMA & HAL_UART_RxCpltCallback & HAL_UART_RxHalfCpltCallback & AAA_UART_IDLE_Callback. */
 void AAA_UART_IDLE_Callback(UART_HandleTypeDef *huart);
 
-
 #elif defined(USART1_DMA_ENABLE) && defined(USART1_DMA_SOLUTION_2)
-/* */
+/* HAL_UARTEx_ReceiveToIdle_DMA & HAL_UARTEx_RxEventCallback. */
 
 #endif
 

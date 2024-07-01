@@ -692,13 +692,13 @@ void AAA_USART1_Demo_Main(void)
   while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY);
 
   /* Different solution of receive. */
-  #if defined USART1_DMA_SOLUTION_1 /* HAL_UART_Receive_DMA. */
+  #if defined USART1_DMA_SOLUTION_1 /* HAL_UART_Receive_DMA & HAL_UART_RxCpltCallback & HAL_UART_RxHalfCpltCallback & AAA_UART_IDLE_Callback. */
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
   HAL_UART_Receive_DMA(&huart1, Buff_USART1_Rx_DMA, sizeof(Buff_USART1_Rx_DMA)-1);
   /* huart->ReceptionType == HAL_UART_RECEPTION_STANDARD, call HAL_UART_RxCpltCallback() & HAL_UART_RxHalfCpltCallback(). */
   /* UART_Start_Receive_DMA() -> HAL_DMA_Start_IT(): __HAL_DMA_DISABLE_IT(hdma, DMA_IT_HT); __HAL_DMA_ENABLE_IT(hdma, (DMA_IT_TC | DMA_IT_TE)); */
 
-  #elif defined USART1_DMA_SOLUTION_2 /* HAL_UARTEx_ReceiveToIdle_DMA. */
+  #elif defined USART1_DMA_SOLUTION_2 /* HAL_UARTEx_ReceiveToIdle_DMA & HAL_UARTEx_RxEventCallback. */
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Buff_USART1_Rx_DMA, sizeof(Buff_USART1_Rx_DMA)-1);
   /* huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE, call HAL_UARTEx_RxEventCallback(). */
   /* UART_Start_Receive_DMA() -> HAL_DMA_Start_IT(): __HAL_DMA_ENABLE_IT(hdma, (DMA_IT_TC | DMA_IT_HT | DMA_IT_TE)); */
