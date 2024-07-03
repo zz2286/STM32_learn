@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>bk4819.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\bk4819.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

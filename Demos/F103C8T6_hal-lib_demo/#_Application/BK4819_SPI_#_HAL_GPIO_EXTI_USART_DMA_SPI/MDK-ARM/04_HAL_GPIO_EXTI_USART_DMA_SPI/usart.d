@@ -8,9 +8,9 @@
   ..\Drivers\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xb.h \
   ..\Drivers\CMSIS\Include\core_cm3.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdint.h \
-  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\04_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_version.h \
-  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\04_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_compiler.h \
-  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\04_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_armclang.h \
+  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\\#_Application\BK4819_SPI_\#_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_version.h \
+  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\\#_Application\BK4819_SPI_\#_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_compiler.h \
+  D:\Zhe\Study\STM32\STM32_learn\Demos\F103C8T6_hal-lib_demo\\#_Application\BK4819_SPI_\#_HAL_GPIO_EXTI_USART_DMA_SPI\Drivers\CMSIS\Include\cmsis_armclang.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\arm_compat.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\arm_acle.h \
   ..\Drivers\CMSIS\Device\ST\STM32F1xx\Include\system_stm32f1xx.h \
@@ -30,4 +30,4 @@
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdio.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\string.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdarg.h \
-  ..\Core\Inc\gpio.h
+  ..\Core\Inc\gpio.h ..\Core\Inc\bk4819.h

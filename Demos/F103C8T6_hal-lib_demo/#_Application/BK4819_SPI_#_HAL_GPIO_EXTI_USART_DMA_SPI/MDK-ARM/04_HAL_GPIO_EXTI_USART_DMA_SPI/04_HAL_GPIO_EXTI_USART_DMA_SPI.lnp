@@ -6,6 +6,7 @@
 "04_hal_gpio_exti_usart_dma_spi\usart.o"
 "04_hal_gpio_exti_usart_dma_spi\stm32f1xx_it.o"
 "04_hal_gpio_exti_usart_dma_spi\stm32f1xx_hal_msp.o"
+"04_hal_gpio_exti_usart_dma_spi\bk4819.o"
 "04_hal_gpio_exti_usart_dma_spi\stm32f1xx_hal_gpio_ex.o"
 "04_hal_gpio_exti_usart_dma_spi\stm32f1xx_hal_tim.o"
 "04_hal_gpio_exti_usart_dma_spi\stm32f1xx_hal_tim_ex.o"

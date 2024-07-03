@@ -1,5 +1,5 @@
-04_hal_gpio_exti_usart_dma_spi/gpio.o: ..\Core\Src\gpio.c \
-  ..\Core\Inc\gpio.h ..\Core\Inc\main.h \
+04_hal_gpio_exti_usart_dma_spi/bk4819.o: ..\Core\Src\bk4819.c \
+  ..\Core\Inc\bk4819.h ..\Core\Inc\main.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
   ..\Core\Inc\stm32f1xx_hal_conf.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h \
@@ -27,7 +27,8 @@
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_flash_ex.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pwr.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h \
-  ..\Core\Inc\bk4819.h ..\Core\Inc\usart.h \
+  ..\Core\Inc\usart.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdio.h \
   D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\string.h \
-  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdarg.h
+  D:\Program_Files\Keil_ARM\ARM\ARMCLANG\include\stdarg.h \
+  ..\Core\Inc\gpio.h

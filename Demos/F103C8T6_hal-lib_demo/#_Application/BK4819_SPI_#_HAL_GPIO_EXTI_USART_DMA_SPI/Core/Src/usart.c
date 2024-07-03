@@ -691,6 +691,8 @@ void AAA_USART1_Demo_Main(void)
   HAL_UART_Transmit_DMA(&huart1, Buff_USART1_Tx_DMA, sizeof(Buff_USART1_Tx_DMA)-1);
   while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY);
 
+  printf("\n");
+
   /* Different solution of receive. */
   #if defined USART1_DMA_SOLUTION_1 /* HAL_UART_Receive_DMA & HAL_UART_RxCpltCallback & HAL_UART_RxHalfCpltCallback & AAA_UART_IDLE_Callback. */
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);

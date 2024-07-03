@@ -25,6 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "bk4819.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,7 +103,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   AAA_USART1_Demo_Main();
-  AAA_RF_SPI_Main();
+  AAA_RF_Main();
 
   while (1)
   {
@@ -111,7 +113,7 @@ int main(void)
 
     AAA_Key_Scan_Loop();
     AAA_USART1_Demo_Loop();
-    AAA_RF_SPI_Loop();
+    AAA_RF_Loop();
 
   }
   /* USER CODE END 3 */
